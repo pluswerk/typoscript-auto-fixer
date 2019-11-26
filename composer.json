@@ -1,0 +1,42 @@
+{
+    "name": "pluswerk/typoscript-auto-fixer",
+    "description": "Provides an auto fixer based on the TypoScript linter from Martin Helmich",
+    "type": "library",
+    "license": "GPL-3.0-or-later",
+    "keywords": ["TYPO3 CMS", "TypoScript"],
+    "authors": [
+        {
+            "name": "Sebastian Hofer",
+            "email": "sebastian.hofer@pluswerk.ag",
+            "homepage": "http://pluswerk.ag",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=7.2.0",
+        "helmich/typo3-typoscript-lint": "^2.0",
+        "pluswerk/grumphp-typoscript-task": "^0.0.4"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8.4",
+        "pluswerk/grumphp-config": "^3.0",
+        "dg/bypass-finals": "^1.1"
+    },
+    "config": {
+        "vendor-dir": ".Build/vendor",
+        "bin-dir": ".Build/bin",
+        "sort-packages": true
+    },
+    "extra": {
+        "typo3/cms": {
+            "cms-package-dir": "{$vendor-dir}/typo3/cms",
+            "web-dir": ".Build/public"
+        },
+        "pluswerk/grumphp-config": {
+            "auto-setting": false
+        },
+        "grumphp": {
+            "config-default-path": "grumphp.yml"
+        }
+    }
+}
