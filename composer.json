@@ -23,6 +23,16 @@
         "pluswerk/grumphp-config": "^3.0",
         "dg/bypass-finals": "^1.1"
     },
+    "autoload": {
+        "psr-4": {
+            "Pluswerk\\TypoScriptAutoFixer\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Pluswerk\\TypoScriptAutoFixer\\Tests\\": "tests"
+        }
+    },
     "config": {
         "vendor-dir": ".Build/vendor",
         "bin-dir": ".Build/bin",
