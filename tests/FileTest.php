@@ -107,16 +107,6 @@ final class FileTest extends TestCase
     /**
      * @test
      */
-    public function ifFileIsNotWritableAnExceptionIsThrown(): void
-    {
-        $file = new File(__DIR__ . '/Fixtures/not_writable_file.txt');
-        $this->expectException(FileNotWritableException::class);
-        $file->replaceLine('failing overwrite', 3);
-    }
-
-    /**
-     * @test
-     */
     public function aFileHoldsAnEmptyIssueCollectionByDefault(): void
     {
         $file = new File(__DIR__ . '/Fixtures/test.txt');
