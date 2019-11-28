@@ -8,6 +8,7 @@ use Helmich\TypoScriptLint\Linter\LinterConfiguration;
 use Helmich\TypoScriptLint\Linter\Sniff\SniffLocator;
 use Helmich\TypoScriptParser\Parser\Parser;
 use Helmich\TypoScriptParser\Tokenizer\Tokenizer;
+use Pluswerk\TypoScriptAutoFixer\Issue\AbstractIssue;
 use Pluswerk\TypoScriptAutoFixer\Issue\IssueCollection;
 use Pluswerk\TypoScriptAutoFixer\Issue\IssueFactory;
 use Symfony\Component\Config\Definition\Processor;
@@ -99,7 +100,10 @@ final class Linter
         $issueFactory = new IssueFactory();
 
         foreach ($file->getIssues() as $issue) {
-            $issueCollection->add($issueFactory->getIssue($issue));
+            $newIssue = $issueFactory->getIssue($issue);
+            if ($newIssue instanceof AbstractIssue) {
+                $issueCollection->add($newIssue);
+            }
         }
 
         return $issueCollection;

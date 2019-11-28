@@ -4,11 +4,24 @@ declare(strict_types=1);
 namespace Pluswerk\TypoScriptAutoFixer\Tests\Fixer;
 
 use PHPUnit\Framework\TestCase;
+use Pluswerk\TypoScriptAutoFixer\Exception\FixerNotFoundException;
 use Pluswerk\TypoScriptAutoFixer\Fixer\FixerFactory;
+use Pluswerk\TypoScriptAutoFixer\Fixer\Indentation\IndentationFixer;
 use Pluswerk\TypoScriptAutoFixer\Fixer\OperatorWhitespace\OperatorWhitespaceFixer;
+use Pluswerk\TypoScriptAutoFixer\Issue\AbstractIssue;
 use Pluswerk\TypoScriptAutoFixer\Issue\OperatorWhitespaceIssue;
+use Pluswerk\TypoScriptAutoFixer\Issue\IndentationIssue;
 
-final class FixerFactoryTest extends TestCase
+final class DummyIssue extends AbstractIssue
+{
+}
+
+/**
+ * Class FixerFactoryTest
+ * @package Pluswerk\TypoScriptAutoFixer\Tests\Fixer
+ * @covers \Pluswerk\TypoScriptAutoFixer\Fixer\FixerFactory
+ */
+final class FixerFactoryTest extends TestCase //phpcs:ignore
 {
     /**
      * @var FixerFactory
@@ -22,11 +35,35 @@ final class FixerFactoryTest extends TestCase
 
     /**
      * @test
+     * @dataProvider issueProvider
      */
-    public function forAIssueTheCorrectFixerIsCreated(): void
+    public function forAIssueTheCorrectFixerIsCreated($issue, $expeted): void
     {
-        $issue = new OperatorWhitespaceIssue(13);
         $fixer = $this->fixerFactory->getFixerByIssue($issue);
-        $this->assertInstanceOf(OperatorWhitespaceFixer::class, $fixer);
+        $this->assertInstanceOf($expeted, $fixer);
+    }
+
+    public function issueProvider()
+    {
+        return [
+            OperatorWhitespaceIssue::class => [
+                'issue' => new OperatorWhitespaceIssue(13),
+                'expected' => OperatorWhitespaceFixer::class
+            ],
+            IndentationIssue::class => [
+                'issue' => new IndentationIssue(13, 4),
+                'expected' => IndentationFixer::class
+            ]
+        ];
+    }
+
+    /**
+     * @test
+     */
+    public function ifNoFixerFoundAnExceptionIsThrown(): void
+    {
+        $issue = new DummyIssue(1);
+        $this->expectException(FixerNotFoundException::class);
+        $this->fixerFactory->getFixerByIssue($issue);
     }
 }

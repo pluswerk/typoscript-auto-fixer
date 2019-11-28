@@ -47,8 +47,8 @@ final class File extends \SplFileInfo
         while (!$fileObject->eof()) {
             if ($fileObject->key() === ($line - 1)) {
                 $content .= $lineValue;
-
-                if (strpos($fileObject->current(), PHP_EOL) !== false) {
+                $currentLine = $fileObject->current();
+                if (strpos($lineValue, PHP_EOL) === false && strpos($currentLine, PHP_EOL) !== false) {
                     $content .= PHP_EOL;
                 }
             } else {

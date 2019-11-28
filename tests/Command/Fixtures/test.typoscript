@@ -1,14 +1,14 @@
 correct = line
 foo =bar
-secondCorrect= line
+  secondCorrect= line
 
 nested {
   definition = value
   another {
-    level=value2
+  level=value2
     line <value3
-    delete>
-    reference=< tmp.object
+      delete>
+				reference=< tmp.object
   }
 }
 
