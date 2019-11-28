@@ -19,5 +19,5 @@ $command = new FixCommand();
 
 $application->add($command);
 
-$application->setDefaultCommand('fix');
+$application->setDefaultCommand('fix', true);
 $application->run();
