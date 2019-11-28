@@ -1,0 +1,38 @@
+language: php
+dist: trusty
+sudo: false
+
+git:
+  depth: 5
+
+php:
+  - 7.2
+  - 7.3
+  - nightly
+
+env:
+  matrix:
+    - dependencies=lowest
+    - dependencies=highest
+
+cache:
+  directories:
+    - $HOME/.composer/cache
+
+matrix:
+  fast_finish: true
+  allow_failures:
+    - php: nightly
+
+install:
+  - if [ -z "$dependencies" ];          then composer install --no-progress --no-scripts --no-suggest -n; fi;
+  - if [ "$dependencies" = "lowest" ];  then composer update --no-progress --no-scripts --no-suggest -n --prefer-lowest; fi;
+  - if [ "$dependencies" = "highest" ]; then composer update --no-progress --no-scripts --no-suggest -n; fi;
+
+script:
+  - ./.Build/bin/grumphp run
+  - ./.Build/bin/phpunit
+
+#after_success:
+#  - bash <(curl -s https://codecov.io/bash) -t b00d641a-6d30-4092-85b6-200f4226a852
+
