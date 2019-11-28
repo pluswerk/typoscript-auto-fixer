@@ -1,0 +1,19 @@
+#!/usr/bin/env php
+<?php
+
+if (is_file(__DIR__ . '/../autoload.php')) {
+    require __DIR__.'/../autoload.php';
+} else {
+    require __DIR__ . '/autoload.php';
+}
+
+use Pluswerk\TypoScriptAutoFixer\Command\FixCommand;
+use Symfony\Component\Console\Application;
+
+$application = new Application('test', '1.0.0');
+$command = new FixCommand();
+
+$application->add($command);
+
+$application->setDefaultCommand('fix');
+$application->run();

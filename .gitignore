@@ -1,2 +1,4 @@
 .Build
 composer.lock
+.phpunit.result.cache
+coverage

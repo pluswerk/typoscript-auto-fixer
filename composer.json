@@ -49,5 +49,6 @@
         "grumphp": {
             "config-default-path": "grumphp.yml"
         }
-    }
+    },
+    "bin": "./bin/tscsf"
 }
