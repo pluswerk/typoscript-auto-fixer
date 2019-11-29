@@ -13,6 +13,11 @@ nested {
 }
 
 
+
+another {
+  section = test
+}
+
 [condition]
   nested.another.level = value4
 [end]

@@ -126,4 +126,41 @@ final class FileTest extends TestCase
         $file->updateIssueCollection($issueCollection);
         $this->assertEquals($issueCollection, $file->issues());
     }
+
+    /**
+     * @test
+     */
+    public function aLineCanBeRemovedFromFile(): void
+    {
+        if (is_file(__DIR__ . '/Fixtures/tmp_test.txt')) {
+            unlink(__DIR__ . '/Fixtures/tmp_test.txt');
+        }
+        copy(__DIR__ . '/Fixtures/test.txt', __DIR__ . '/Fixtures/tmp_test.txt');
+        $file = new File(__DIR__ . '/Fixtures/tmp_test.txt');
+        $line = 2;
+        $file->removeLine($line);
+        $expected = 'line one value' . PHP_EOL
+                    . 'line three value' . PHP_EOL
+                    . 'line four value';
+        $this->assertSame($expected, file_get_contents(__DIR__ . '/Fixtures/tmp_test.txt'));
+        unlink(__DIR__ . '/Fixtures/tmp_test.txt');
+    }
+
+    /**
+     * @test
+     */
+    public function multipleLinesCanBeRemovedFromFile(): void
+    {
+        if (is_file(__DIR__ . '/Fixtures/tmp_test.txt')) {
+            unlink(__DIR__ . '/Fixtures/tmp_test.txt');
+        }
+        copy(__DIR__ . '/Fixtures/test.txt', __DIR__ . '/Fixtures/tmp_test.txt');
+        $file = new File(__DIR__ . '/Fixtures/tmp_test.txt');
+        $lines = [2,3];
+        $file->removeLines($lines);
+        $expected = 'line one value' . PHP_EOL
+                    . 'line four value';
+        $this->assertSame($expected, file_get_contents(__DIR__ . '/Fixtures/tmp_test.txt'));
+        unlink(__DIR__ . '/Fixtures/tmp_test.txt');
+    }
 }

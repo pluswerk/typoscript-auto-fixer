@@ -11,10 +11,11 @@ final class IssueFactory
 
     /**
      * @param Issue $issue
+     * @param array $tokens
      *
      * @return AbstractIssue|null
      */
-    public function getIssue(Issue $issue): ?AbstractIssue
+    public function getIssue(Issue $issue, array $tokens): ?AbstractIssue
     {
         $message = $issue->getMessage();
 
@@ -31,6 +32,9 @@ final class IssueFactory
                     $char = "\t";
                 }
                 return new IndentationIssue((int) $issue->getLine(), (int)($matches[1] ?? 0), $char);
+                break;
+            case 'Empty assignment block':
+                return new EmptySectionIssue((int) $issue->getLine(), $tokens);
                 break;
             default:
                 return null;

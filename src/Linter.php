@@ -100,7 +100,7 @@ final class Linter
         $issueFactory = new IssueFactory();
 
         foreach ($file->getIssues() as $issue) {
-            $newIssue = $issueFactory->getIssue($issue);
+            $newIssue = $issueFactory->getIssue($issue, $tokens);
             if ($newIssue instanceof AbstractIssue) {
                 $issueCollection->add($newIssue);
             }

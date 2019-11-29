@@ -5,10 +5,12 @@ namespace Pluswerk\TypoScriptAutoFixer\Tests\Fixer;
 
 use PHPUnit\Framework\TestCase;
 use Pluswerk\TypoScriptAutoFixer\Exception\FixerNotFoundException;
+use Pluswerk\TypoScriptAutoFixer\Fixer\EmptySection\EmptySectionFixer;
 use Pluswerk\TypoScriptAutoFixer\Fixer\FixerFactory;
 use Pluswerk\TypoScriptAutoFixer\Fixer\Indentation\IndentationFixer;
 use Pluswerk\TypoScriptAutoFixer\Fixer\OperatorWhitespace\OperatorWhitespaceFixer;
 use Pluswerk\TypoScriptAutoFixer\Issue\AbstractIssue;
+use Pluswerk\TypoScriptAutoFixer\Issue\EmptySectionIssue;
 use Pluswerk\TypoScriptAutoFixer\Issue\OperatorWhitespaceIssue;
 use Pluswerk\TypoScriptAutoFixer\Issue\IndentationIssue;
 
@@ -53,6 +55,10 @@ final class FixerFactoryTest extends TestCase //phpcs:ignore
             IndentationIssue::class => [
                 'issue' => new IndentationIssue(13, 4),
                 'expected' => IndentationFixer::class
+            ],
+            EmptySectionIssue::class => [
+                'issue' => new EmptySectionIssue(13, []),
+                'expected' => EmptySectionFixer::class
             ]
         ];
     }

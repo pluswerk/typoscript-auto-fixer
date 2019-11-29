@@ -32,6 +32,49 @@ final class File extends \SplFileInfo
         return $fileObject->current();
     }
 
+    public function removeLine(int $line): void
+    {
+        $fileObject = $this->openFile('r');
+        $content = '';
+        $fileObject->rewind();
+
+        while (!$fileObject->eof()) {
+            if ($fileObject->key() === ($line - 1)) {
+                // do not assign! It is the content of the line to remove.
+                $fileObject->current();
+            } else {
+                $content .= $fileObject->current();
+            }
+
+            $fileObject->next();
+        }
+
+        $this->overwriteFileContent($content);
+    }
+
+    /**
+     * @param int[] $lines
+     */
+    public function removeLines(array $lines): void
+    {
+        $fileObject = $this->openFile('r');
+        $content = '';
+        $fileObject->rewind();
+
+        while (!$fileObject->eof()) {
+            if (in_array($fileObject->key() + 1, $lines, true)) {
+                // do not assign! It is the content of the line to remove.
+                $fileObject->current();
+            } else {
+                $content .= $fileObject->current();
+            }
+
+            $fileObject->next();
+        }
+
+        $this->overwriteFileContent($content);
+    }
+
     /**
      * @param string $lineValue
      * @param int    $line
