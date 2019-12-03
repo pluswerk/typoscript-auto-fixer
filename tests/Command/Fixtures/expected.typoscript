@@ -9,10 +9,10 @@ nested {
     line < value3
     delete >
     reference =< tmp.object
+    item = value
+    nestedItem = nestedItemValue
   }
 }
-
-
 
 another {
   section = test

@@ -6,11 +6,13 @@ namespace Pluswerk\TypoScriptAutoFixer\Tests\Fixer;
 use PHPUnit\Framework\TestCase;
 use Pluswerk\TypoScriptAutoFixer\Exception\FixerNotFoundException;
 use Pluswerk\TypoScriptAutoFixer\Fixer\EmptySection\EmptySectionFixer;
+use Pluswerk\TypoScriptAutoFixer\Fixer\NestingConsistency\NestingConsistencyFixer;
 use Pluswerk\TypoScriptAutoFixer\Fixer\FixerFactory;
 use Pluswerk\TypoScriptAutoFixer\Fixer\Indentation\IndentationFixer;
 use Pluswerk\TypoScriptAutoFixer\Fixer\OperatorWhitespace\OperatorWhitespaceFixer;
 use Pluswerk\TypoScriptAutoFixer\Issue\AbstractIssue;
 use Pluswerk\TypoScriptAutoFixer\Issue\EmptySectionIssue;
+use Pluswerk\TypoScriptAutoFixer\Issue\NestingConsistencyIssue;
 use Pluswerk\TypoScriptAutoFixer\Issue\OperatorWhitespaceIssue;
 use Pluswerk\TypoScriptAutoFixer\Issue\IndentationIssue;
 
@@ -59,6 +61,10 @@ final class FixerFactoryTest extends TestCase //phpcs:ignore
             EmptySectionIssue::class => [
                 'issue' => new EmptySectionIssue(13, []),
                 'expected' => EmptySectionFixer::class
+            ],
+            NestingConsistencyIssue::class => [
+                'issue' => new NestingConsistencyIssue(13, 14, []),
+                'expected' => NestingConsistencyFixer::class
             ]
         ];
     }

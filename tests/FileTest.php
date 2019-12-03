@@ -163,4 +163,41 @@ final class FileTest extends TestCase
         $this->assertSame($expected, file_get_contents(__DIR__ . '/Fixtures/tmp_test.txt'));
         unlink(__DIR__ . '/Fixtures/tmp_test.txt');
     }
+
+    /**
+     * @test
+     */
+    public function linesCanBeInsertedIntoFile(): void
+    {
+        if (is_file(__DIR__ . '/Fixtures/tmp_test.txt')) {
+            unlink(__DIR__ . '/Fixtures/tmp_test.txt');
+        }
+        copy(__DIR__ . '/Fixtures/test.txt', __DIR__ . '/Fixtures/tmp_test.txt');
+        $file = new File(__DIR__ . '/Fixtures/tmp_test.txt');
+
+        $insertString = 'added line 1' . PHP_EOL . 'added line 2' . PHP_EOL . 'added line 3' . PHP_EOL;
+        $file->insertStringToFile(3, $insertString);
+
+        $this->assertFileEquals(__DIR__ . '/Fixtures/expected_insertion.txt', $file->getPathname());
+
+        unlink(__DIR__ . '/Fixtures/tmp_test.txt');
+    }
+    
+    /**
+     * @test
+     */
+    public function needlessEmptyLinesCanBeRemoved(): void
+    {
+        if (is_file(__DIR__ . '/Fixtures/tmp_test.txt')) {
+            unlink(__DIR__ . '/Fixtures/tmp_test.txt');
+        }
+        copy(__DIR__ . '/Fixtures/test_empty_lines.txt', __DIR__ . '/Fixtures/tmp_test.txt');
+        $file = new File(__DIR__ . '/Fixtures/tmp_test.txt');
+
+        $file->removeNeedlessEmptyLines();
+
+        $this->assertFileEquals(__DIR__ . '/Fixtures/expected_test_empty_lines.txt', $file->getPathname());
+
+        unlink(__DIR__ . '/Fixtures/tmp_test.txt');
+    }
 }

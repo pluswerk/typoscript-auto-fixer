@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Pluswerk\TypoScriptAutoFixer\Tests\Fixer;
 
+use phpDocumentor\Reflection\Types\This;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Pluswerk\TypoScriptAutoFixer\File;
@@ -71,6 +72,8 @@ final class IssueFixerTest extends TestCase
 
         $fixedFileIssueCollection->expects($this->once())->method('count')->willReturn(0);
 
+        $file->expects($this->at(1))->method('removeNeedlessEmptyLines');
+
         $this->issueFixer->fixIssuesForFile($filePath);
     }
 
@@ -95,6 +98,8 @@ final class IssueFixerTest extends TestCase
         $this->fixerFactory->expects($this->exactly(50))->method('getFixerByIssue')->with($issue)->willReturn($fixer);
 
         $fixer->expects($this->exactly(50))->method('fixIssue')->with($file, $issue)->willReturn($file);
+
+        $file->expects($this->at(101))->method('removeNeedlessEmptyLines');
 
         $this->issueFixer->fixIssuesForFile($filePath);
     }

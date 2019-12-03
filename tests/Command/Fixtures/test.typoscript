@@ -22,6 +22,14 @@ another {
   }
 }
 
+nested.another.item = value
+
+nested {
+  another {
+    nestedItem = nestedItemValue
+  }
+}
+
 another {
   empty {
 

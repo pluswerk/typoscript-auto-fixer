@@ -36,5 +36,6 @@ final class IssueFixer
             $file = $fixer->fixIssue($file, $issue);
             $count++;
         }
+        $file->removeNeedlessEmptyLines();
     }
 }

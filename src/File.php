@@ -105,6 +105,56 @@ final class File extends \SplFileInfo
     }
 
     /**
+     * @param int    $line
+     * @param string $string
+     */
+    public function insertStringToFile(int $line, string $string): void
+    {
+        $fileObject = $this->openFile('r');
+        $content = '';
+        $fileObject->rewind();
+
+        while (!$fileObject->eof()) {
+            if ($fileObject->key() === ($line - 1)) {
+                $content .= $string;
+                $content .= $fileObject->current();
+            } else {
+                $content .= $fileObject->current();
+            }
+
+            $fileObject->next();
+        }
+
+        $this->overwriteFileContent($content);
+    }
+
+    public function removeNeedlessEmptyLines(): void
+    {
+        $fileObject = $this->openFile('r');
+        $content = '';
+        $fileObject->rewind();
+
+        $lastLineWasEmpty = false;
+
+        while (!$fileObject->eof()) {
+            $current = $fileObject->current();
+            if (trim($current) === '') {
+                $lastLineWasEmpty = true;
+                $fileObject->next();
+                continue;
+            }
+            if ($lastLineWasEmpty) {
+                $lastLineWasEmpty = false;
+                $content .= PHP_EOL;
+            }
+            $content .= $current;
+            $fileObject->next();
+        }
+
+        $this->overwriteFileContent($content);
+    }
+
+    /**
      * @param IssueCollection $issueCollection
      */
     public function updateIssueCollection(IssueCollection $issueCollection): void

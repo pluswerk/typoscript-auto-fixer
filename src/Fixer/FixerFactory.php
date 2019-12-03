@@ -5,11 +5,13 @@ namespace Pluswerk\TypoScriptAutoFixer\Fixer;
 
 use Pluswerk\TypoScriptAutoFixer\Exception\FixerNotFoundException;
 use Pluswerk\TypoScriptAutoFixer\Fixer\EmptySection\EmptySectionFixer;
+use Pluswerk\TypoScriptAutoFixer\Fixer\NestingConsistency\NestingConsistencyFixer;
 use Pluswerk\TypoScriptAutoFixer\Fixer\Indentation\IndentationFixer;
 use Pluswerk\TypoScriptAutoFixer\Fixer\OperatorWhitespace\OperatorWhitespaceFixer;
 use Pluswerk\TypoScriptAutoFixer\Issue\AbstractIssue;
 use Pluswerk\TypoScriptAutoFixer\Issue\EmptySectionIssue;
 use Pluswerk\TypoScriptAutoFixer\Issue\IndentationIssue;
+use Pluswerk\TypoScriptAutoFixer\Issue\NestingConsistencyIssue;
 use Pluswerk\TypoScriptAutoFixer\Issue\OperatorWhitespaceIssue;
 
 final class FixerFactory
@@ -30,6 +32,9 @@ final class FixerFactory
                 break;
             case EmptySectionIssue::class:
                 return new EmptySectionFixer();
+                break;
+            case NestingConsistencyIssue::class:
+                return new NestingConsistencyFixer();
         }
         throw new FixerNotFoundException('Fixer for issue ' . get_class($issue) . ' not found');
     }
