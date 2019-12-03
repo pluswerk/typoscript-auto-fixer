@@ -53,7 +53,7 @@ final class NestingConsistencyFixerTest extends TestCase
                  [23],
                  [24],
                  [25],
-                 [26],
+                 [26]
              )
              ->willReturnOnConsecutiveCalls(
                  ...[
