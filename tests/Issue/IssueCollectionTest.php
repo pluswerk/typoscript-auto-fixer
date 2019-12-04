@@ -53,6 +53,29 @@ final class IssueCollectionTest extends TestCase //phpcs:ignore
         $this->issueCollection->next();
         $this->assertSame($lineB, $this->issueCollection->current()->line());
     }
+    
+    /**
+     * @test
+     */
+    public function overAllIssuesCanBeIterated(): void
+    {
+        $fixerIssueA = new TestIssue(5);
+        $fixerIssueB = new TestIssue(17);
+
+        $this->issueCollection->add($fixerIssueA);
+        $this->issueCollection->add($fixerIssueB);
+
+        $result = [
+            $fixerIssueA,
+            $fixerIssueB
+        ];
+
+        $this->assertSame(count($result), $this->issueCollection->count());
+
+        foreach ($this->issueCollection as $key => $issue) {
+            $this->assertSame($result[$key], $issue);
+        }
+    }
 
     public function issuesProvider(): array
     {
