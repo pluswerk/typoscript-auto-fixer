@@ -59,11 +59,11 @@ final class FixerFactoryTest extends TestCase //phpcs:ignore
                 'expected' => IndentationFixer::class
             ],
             EmptySectionIssue::class => [
-                'issue' => new EmptySectionIssue(13, []),
+                'issue' => new EmptySectionIssue(13, 15),
                 'expected' => EmptySectionFixer::class
             ],
             NestingConsistencyIssue::class => [
-                'issue' => new NestingConsistencyIssue(13, 14, []),
+                'issue' => new NestingConsistencyIssue(13, 17, 15, 19),
                 'expected' => NestingConsistencyFixer::class
             ]
         ];

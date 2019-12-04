@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 use Pluswerk\TypoScriptAutoFixer\File;
 use Pluswerk\TypoScriptAutoFixer\FileBuilder;
 use Pluswerk\TypoScriptAutoFixer\Issue\AbstractIssue;
-use Pluswerk\TypoScriptAutoFixer\Linter;
+use Pluswerk\TypoScriptAutoFixer\Adapter\Linter;
 use Pluswerk\TypoScriptAutoFixer\Issue\IssueCollection;
 
 /**
@@ -18,7 +18,7 @@ use Pluswerk\TypoScriptAutoFixer\Issue\IssueCollection;
 final class FileBuilderTest extends TestCase
 {
     /**
-     * @var Linter
+     * @var \Pluswerk\TypoScriptAutoFixer\Adapter\Linter
      */
     private $linter;
 

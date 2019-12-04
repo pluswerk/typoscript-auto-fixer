@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace Pluswerk\TypoScriptAutoFixer\Tests\Issue;
+namespace Pluswerk\TypoScriptAutoFixer\Tests\Adapter;
 
 use Helmich\TypoScriptLint\Linter\Report\Issue;
 use Helmich\TypoScriptParser\Tokenizer\Tokenizer;
 use PHPUnit\Framework\TestCase;
 use Pluswerk\TypoScriptAutoFixer\Issue\EmptySectionIssue;
-use Pluswerk\TypoScriptAutoFixer\Issue\IssueFactory;
+use Pluswerk\TypoScriptAutoFixer\Adapter\IssueFactory;
 use Pluswerk\TypoScriptAutoFixer\Issue\OperatorWhitespaceIssue;
 use Pluswerk\TypoScriptAutoFixer\Issue\IndentationIssue;
 use Pluswerk\TypoScriptAutoFixer\Issue\NestingConsistencyIssue;
@@ -15,7 +15,7 @@ use Pluswerk\TypoScriptAutoFixer\Issue\NestingConsistencyIssue;
 /**
  * Class IssueFactoryTest
  * @package Pluswerk\TypoScriptAutoFixer\Tests\Issue
- * @covers \Pluswerk\TypoScriptAutoFixer\Issue\IssueFactory
+ * @covers \Pluswerk\TypoScriptAutoFixer\Adapter\IssueFactory
  */
 final class IssueFactoryTest extends TestCase
 {
@@ -132,7 +132,7 @@ final class IssueFactoryTest extends TestCase
      */
     public function ifIssueIsEmptyAssignmentBlockAnEmptySectionIssueIsCreated(): void
     {
-        $issue      = new Issue(16, null, 'Empty assignment block', Issue::SEVERITY_WARNING, __CLASS__);
+        $issue      = new Issue(4, null, 'Empty assignment block', Issue::SEVERITY_WARNING, __CLASS__);
         $input      = 'test = dummyline' . PHP_EOL
                  . 'another = dummy line' . PHP_EOL
                  . 'last.dummy = line' . PHP_EOL
@@ -142,9 +142,26 @@ final class IssueFactoryTest extends TestCase
 
         $tokenizer = new Tokenizer();
         $tokens = $tokenizer->tokenizeString($input);
-        $fixerIssue = new EmptySectionIssue(16, $tokens);
+        $fixerIssue = new EmptySectionIssue(4, 6);
 
         $this->assertEquals($fixerIssue, $this->issueFactory->getIssue($issue, $tokens));
+    }
+
+    /**
+     * @test
+     */
+    public function ifIssueIsEmptyAssignmentBlockButNoEndCanBeDetectedNullIsReturned(): void
+    {
+        $issue      = new Issue(4, null, 'Empty assignment block', Issue::SEVERITY_WARNING, __CLASS__);
+        $input      = 'test = dummyline' . PHP_EOL
+                 . 'another = dummy line' . PHP_EOL
+                 . 'last.dummy = line' . PHP_EOL
+                 . 'foo.bar = not empty section' . PHP_EOL;
+
+        $tokenizer = new Tokenizer();
+        $tokens = $tokenizer->tokenizeString($input);
+
+        $this->assertNull($this->issueFactory->getIssue($issue, $tokens));
     }
 
     /**
@@ -163,7 +180,7 @@ final class IssueFactoryTest extends TestCase
         $input      = 'test = dummyline' . PHP_EOL
                       . 'another = dummy line' . PHP_EOL
                       . 'last.dummy = line' . PHP_EOL
-                      . 'nest.bar {'
+                      . 'nest.bar {' . PHP_EOL
                       . '  foo = value1234' . PHP_EOL
                       . '}' . PHP_EOL
                       . '' . PHP_EOL
@@ -191,7 +208,7 @@ final class IssueFactoryTest extends TestCase
         $tokenizer = new Tokenizer();
         $tokens = $tokenizer->tokenizeString($input);
 
-        $fixerIssue = new NestingConsistencyIssue(4, 21, $tokens);
+        $fixerIssue = new NestingConsistencyIssue(4, 21, 6, 26);
 
         $this->assertEquals($fixerIssue, $this->issueFactory->getIssue($issue, $tokens));
     }
@@ -240,7 +257,7 @@ final class IssueFactoryTest extends TestCase
         $tokenizer = new Tokenizer();
         $tokens = $tokenizer->tokenizeString($input);
 
-        $fixerIssue = new NestingConsistencyIssue(4, 21, $tokens);
+        $fixerIssue = new NestingConsistencyIssue(4, 21, 6, 26);
 
         $this->assertEquals($fixerIssue, $this->issueFactory->getIssue($issue, $tokens));
     }
@@ -290,8 +307,104 @@ final class IssueFactoryTest extends TestCase
         $tokenizer = new Tokenizer();
         $tokens = $tokenizer->tokenizeString($input);
 
-        $fixerIssue = new NestingConsistencyIssue(5, 22, $tokens);
+        $fixerIssue = new NestingConsistencyIssue(5, 22, 7, 27);
 
         $this->assertEquals($fixerIssue, $this->issueFactory->getIssue($issue, $tokens));
+    }
+
+    /**
+     * @test
+     */
+    public function ifIssueIsMultipleNestedStatementsIssueButNoSecondNestingIsDetectedNullIsReturned(): void
+    {
+        $issue = new Issue(
+            22,
+            null,
+            'Multiple nested statements for object path "nest". Consider merging them into one statement.',
+            Issue::SEVERITY_WARNING,
+            __CLASS__
+        );
+
+        $input      = 'test = dummyline' . PHP_EOL
+                      . 'another = dummy line' . PHP_EOL
+                      . 'last.dummy = line' . PHP_EOL
+                      . 'nest.test = testvalue' . PHP_EOL
+                      . 'nest.bar = bar value' . PHP_EOL
+                      . 'foo = value1234' . PHP_EOL
+                      . '' . PHP_EOL
+                      . '' . PHP_EOL
+                      . '' . PHP_EOL
+                      . '' . PHP_EOL
+                      . '' . PHP_EOL
+                      . '' . PHP_EOL
+                      . '' . PHP_EOL
+                      . '' . PHP_EOL
+                      . '' . PHP_EOL
+                      . '' . PHP_EOL
+                      . '' . PHP_EOL
+                      . '' . PHP_EOL
+                      . '' . PHP_EOL
+                      . '' . PHP_EOL
+                      . '' . PHP_EOL
+                      . 'nest.bar {' . PHP_EOL
+                      . '  definition = value' . PHP_EOL
+                      . '  another {' . PHP_EOL
+                      . '    level = value2' . PHP_EOL
+                      . '  }' . PHP_EOL
+                      . '}' . PHP_EOL
+                      . '' . PHP_EOL;
+
+        $tokenizer = new Tokenizer();
+        $tokens = $tokenizer->tokenizeString($input);
+
+        $this->assertNull($this->issueFactory->getIssue($issue, $tokens));
+    }
+
+    /**
+     * @test
+     */
+    public function ifIssueIsMultipleNestedStatementsIssueButNoStatementIsDetectedNullIsReturned(): void
+    {
+        $issue = new Issue(
+            22,
+            null,
+            'Multiple nested statements for object path "nest". Consider merging them into one statement.',
+            Issue::SEVERITY_WARNING,
+            __CLASS__
+        );
+
+        $input      = 'test = dummyline' . PHP_EOL
+                      . 'another = dummy line' . PHP_EOL
+                      . 'last.dummy = line' . PHP_EOL
+                      . 'nest.test = testvalue' . PHP_EOL
+                      . '' . PHP_EOL
+                      . 'foo = value1234' . PHP_EOL
+                      . '' . PHP_EOL
+                      . '' . PHP_EOL
+                      . '' . PHP_EOL
+                      . '' . PHP_EOL
+                      . '' . PHP_EOL
+                      . '' . PHP_EOL
+                      . '' . PHP_EOL
+                      . '' . PHP_EOL
+                      . '' . PHP_EOL
+                      . '' . PHP_EOL
+                      . '' . PHP_EOL
+                      . '' . PHP_EOL
+                      . '' . PHP_EOL
+                      . '' . PHP_EOL
+                      . '' . PHP_EOL
+                      . 'nest.bar {' . PHP_EOL
+                      . '  definition = value' . PHP_EOL
+                      . '  another {' . PHP_EOL
+                      . '    level = value2' . PHP_EOL
+                      . '  }' . PHP_EOL
+                      . '}' . PHP_EOL
+                      . '' . PHP_EOL;
+
+        $tokenizer = new Tokenizer();
+        $tokens = $tokenizer->tokenizeString($input);
+
+        $this->assertNull($this->issueFactory->getIssue($issue, $tokens));
     }
 }

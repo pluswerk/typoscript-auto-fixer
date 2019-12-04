@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Pluswerk\TypoScriptAutoFixer;
+namespace Pluswerk\TypoScriptAutoFixer\Adapter;
 
 use Exception;
 use Helmich\TypoScriptLint\Linter\LinterConfiguration;
@@ -10,7 +10,7 @@ use Helmich\TypoScriptParser\Parser\Parser;
 use Helmich\TypoScriptParser\Tokenizer\Tokenizer;
 use Pluswerk\TypoScriptAutoFixer\Issue\AbstractIssue;
 use Pluswerk\TypoScriptAutoFixer\Issue\IssueCollection;
-use Pluswerk\TypoScriptAutoFixer\Issue\IssueFactory;
+use Pluswerk\TypoScriptAutoFixer\Adapter\IssueFactory;
 use Symfony\Component\Config\Definition\Processor;
 
 final class Linter

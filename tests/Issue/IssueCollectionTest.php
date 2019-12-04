@@ -56,9 +56,9 @@ final class IssueCollectionTest extends TestCase //phpcs:ignore
 
     public function issuesProvider(): array
     {
-        $fixerIssueA = new DummyIssue(17);
-        $fixerIssueB = new DummyIssue(5);
-        $fixerIssueC = new DummyIssue(5);
+        $fixerIssueA = new TestIssue(17);
+        $fixerIssueB = new TestIssue(5);
+        $fixerIssueC = new TestIssue(5);
         return [
             [
                 'issueA' => $fixerIssueA,

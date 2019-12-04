@@ -19,7 +19,7 @@ final class EmptySectionIssueTest extends TestCase
      */
     public function issueKnowsStartLine(): void
     {
-        $issue = new EmptySectionIssue(4, []);
+        $issue = new EmptySectionIssue(4, 7);
         $this->assertSame(4, $issue->startLine());
     }
 
@@ -27,11 +27,9 @@ final class EmptySectionIssueTest extends TestCase
      * @test
      * @dataProvider emptySectionInputProvider
      */
-    public function issueKnowsEndLine($input, $startLine, $expected): void
+    public function issueKnowsEndLine($startLine, $endLine, $expected): void
     {
-        $tokenizer = new Tokenizer();
-        $tokens = $tokenizer->tokenizeString($input);
-        $issue = new EmptySectionIssue($startLine, $tokens);
+        $issue = new EmptySectionIssue($startLine, $endLine);
         $this->assertSame($expected, $issue->endLine());
     }
 
@@ -39,24 +37,8 @@ final class EmptySectionIssueTest extends TestCase
     {
         return [
             'first level' => [
-                'input' => 'test = dummyline' . PHP_EOL
-                           . 'another = dummy line' . PHP_EOL
-                           . 'last.dummy = line' . PHP_EOL
-                           . 'foo.bar {' . PHP_EOL
-                           . '  ' . PHP_EOL
-                           . '}' . PHP_EOL,
                 'startLine' => 4,
-                'expected' => 6
-            ],
-            'second level' => [
-                'input' => 'test = dummyline' . PHP_EOL
-                           . 'another = dummy line' . PHP_EOL
-                           . 'last.dummy = line' . PHP_EOL
-                           . 'foo.bar {' . PHP_EOL
-                           . '  empty {' . PHP_EOL
-                           . '  }' . PHP_EOL
-                           . '}' . PHP_EOL,
-                'startLine' => 5,
+                'endLine' => 6,
                 'expected' => 6
             ]
         ];

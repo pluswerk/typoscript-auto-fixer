@@ -23,45 +23,13 @@ final class NestingConsistencyIssue extends AbstractIssue
      */
     private $secondEndLine;
 
-    public function __construct(int $line, int $secondLine, array $tokens)
+    public function __construct(int $line, int $secondLine, int $firstEndLine, int $secondEndLine)
     {
         parent::__construct($line);
 
+        $this->firstEndLine = $firstEndLine;
         $this->secondLine = $secondLine;
-
-        $lineGrouper = new LineGrouper($tokens);
-        $tokenLines = $lineGrouper->getLines();
-
-        $amountOfLines = count($tokenLines);
-        $openedBraces = 0;
-        for ($i = $line; $i<=$amountOfLines; $i++) {
-            foreach ($tokenLines[$i] as $token) {
-                if ($token->getType() === TokenInterface::TYPE_BRACE_OPEN) {
-                    $openedBraces++;
-                } elseif ($token->getType() === TokenInterface::TYPE_BRACE_CLOSE) {
-                    $openedBraces--;
-                }
-            }
-            if ($openedBraces === 0) {
-                $this->firstEndLine = $i;
-                break;
-            }
-        }
-
-        $openedBraces = 0;
-        for ($i = $secondLine; $i<=$amountOfLines; $i++) {
-            foreach ($tokenLines[$i] as $token) {
-                if ($token->getType() === TokenInterface::TYPE_BRACE_OPEN) {
-                    $openedBraces++;
-                } elseif ($token->getType() === TokenInterface::TYPE_BRACE_CLOSE) {
-                    $openedBraces--;
-                }
-            }
-            if ($openedBraces === 0) {
-                $this->secondEndLine = $i;
-                break;
-            }
-        }
+        $this->secondEndLine = $secondEndLine;
     }
 
     /**

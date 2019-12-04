@@ -40,7 +40,7 @@ final class EmptySectionFixerTest extends TestCase
             . '  }' . PHP_EOL
             . '}' . PHP_EOL
         );
-        $issue = new EmptySectionIssue(5, $tokens);
+        $issue = new EmptySectionIssue(5, 7);
 
         $file->expects($this->at(0))->method('removeLines')->with([5,6,7]);
 

@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Pluswerk\TypoScriptAutoFixer\Tests\Fixer\NestedConsistency;
 
-use DG\BypassFinals;
 use Helmich\TypoScriptParser\Tokenizer\Tokenizer;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -148,10 +147,10 @@ final class NestingConsistencyFixerTest extends TestCase
 
         return [
             [
-                'issue' => new NestingConsistencyIssue(4, 21, $tokens)
+                'issue' => new NestingConsistencyIssue(4, 21, 6, 26)
             ],
             [
-                'issue' => new NestingConsistencyIssue(21, 4, $tokens)
+                'issue' => new NestingConsistencyIssue(21, 4, 26, 6)
             ]
         ];
     }

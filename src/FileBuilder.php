@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Pluswerk\TypoScriptAutoFixer;
 
+use Pluswerk\TypoScriptAutoFixer\Adapter\Linter;
+
 final class FileBuilder
 {
     /**
