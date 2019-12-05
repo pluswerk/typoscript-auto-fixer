@@ -20,6 +20,16 @@ final class IssueFactory
     private const NESTED_CONSISTENCY_03 = '/^Multiple nested statements for object path \"(.*)\"\. Consider merging them into one statement\.$/';
 
     /**
+     * @var AdapterUtility
+     */
+    private $adapterUtility;
+
+    public function __construct()
+    {
+        $this->adapterUtility = new AdapterUtility();
+    }
+
+    /**
      * @param Issue $issue
      * @param array $tokens
      *
@@ -113,48 +123,21 @@ final class IssueFactory
      */
     private function buildNestingConsistencyIssue0102(Issue $issue, array $matches, array $tokens): NestingConsistencyIssue
     {
-        $secondLine = $matches[1] ?? 0;
+        $secondLine = (int) $matches[1] ?? 0;
         $firstLine = (int) $issue->getLine();
-        if ((int) $issue->getLine() > $secondLine) {
-            $firstLine = $secondLine;
-            $secondLine = (int) $issue->getLine();
+
+        if ($secondLine < $firstLine) {
+            [$secondLine, $firstLine] = [$firstLine, $secondLine];
         }
 
-        $lineGrouper = new LineGrouper($tokens);
-        $tokenLines = $lineGrouper->getLines();
+        $firstEndLine = $this->adapterUtility->findEndLineOfNestedStatement($firstLine, $tokens);
+        $secondEndLine = $this->adapterUtility->findEndLineOfNestedStatement($secondLine, $tokens);
 
-        $amountOfLines = count($tokenLines);
-        $openedBraces = 0;
-        for ($i = $firstLine; $i<=$amountOfLines; $i++) {
-            foreach ($tokenLines[$i] as $token) {
-                if ($token->getType() === TokenInterface::TYPE_BRACE_OPEN) {
-                    $openedBraces++;
-                } elseif ($token->getType() === TokenInterface::TYPE_BRACE_CLOSE) {
-                    $openedBraces--;
-                }
-            }
-            if ($openedBraces === 0) {
-                $firstEndLine = $i;
-                break;
-            }
+        if ($secondLine === 0 || $firstEndLine === 0 || $secondEndLine === 0) {
+            return null;
         }
 
-        $openedBraces = 0;
-        for ($i = $secondLine; $i<=$amountOfLines; $i++) {
-            foreach ($tokenLines[$i] as $token) {
-                if ($token->getType() === TokenInterface::TYPE_BRACE_OPEN) {
-                    $openedBraces++;
-                } elseif ($token->getType() === TokenInterface::TYPE_BRACE_CLOSE) {
-                    $openedBraces--;
-                }
-            }
-            if ($openedBraces === 0) {
-                $secondEndLine = $i;
-                break;
-            }
-        }
-
-        return new NestingConsistencyIssue((int) $firstLine, (int) $secondLine, (int) $firstEndLine, (int) $secondEndLine);
+        return new NestingConsistencyIssue($firstLine, $secondLine, $firstEndLine, $secondEndLine);
     }
 
     /**
@@ -166,54 +149,15 @@ final class IssueFactory
      */
     private function buildNestingConsistencyIssue03(Issue $issue, $matches, array $tokens): ?NestingConsistencyIssue
     {
-        $tokenLines = new LineGrouper($tokens);
         $secondLine = (int) $issue->getLine();
-        foreach ($tokenLines->getLines() as $key => $tokenLine) {
-            $value = $tokenLine[0]->getValue();
-            if (preg_match('/^' . $matches[1] . '($|\..*)/', $value)) {
-                foreach ($tokenLine as $token) {
-                    if ($token->getType() === TokenInterface::TYPE_BRACE_OPEN && $tokenLine[0]->getLine() !== $secondLine) {
-                        $firstLine = $tokenLine[0]->getLine();
+        $firstLine = $this->adapterUtility->findFirstNestedAppearanceOfObjectPath($secondLine, $matches[1], $tokens);
+        $firstEndLine = $this->adapterUtility->findEndLineOfNestedStatement($firstLine, $tokens);
+        $secondEndLine = $this->adapterUtility->findEndLineOfNestedStatement($secondLine, $tokens);
 
-                        $lineGrouper = new LineGrouper($tokens);
-                        $tokenLines = $lineGrouper->getLines();
-
-                        $amountOfLines = count($tokenLines);
-                        $openedBraces = 0;
-                        for ($i = $firstLine; $i<=$amountOfLines; $i++) {
-                            foreach ($tokenLines[$i] as $token) {
-                                if ($token->getType() === TokenInterface::TYPE_BRACE_OPEN) {
-                                    $openedBraces++;
-                                } elseif ($token->getType() === TokenInterface::TYPE_BRACE_CLOSE) {
-                                    $openedBraces--;
-                                }
-                            }
-                            if ($openedBraces === 0) {
-                                $firstEndLine = $i;
-                                break;
-                            }
-                        }
-
-                        $openedBraces = 0;
-                        for ($i = $secondLine; $i<=$amountOfLines; $i++) {
-                            foreach ($tokenLines[$i] as $token) {
-                                if ($token->getType() === TokenInterface::TYPE_BRACE_OPEN) {
-                                    $openedBraces++;
-                                } elseif ($token->getType() === TokenInterface::TYPE_BRACE_CLOSE) {
-                                    $openedBraces--;
-                                }
-                            }
-                            if ($openedBraces === 0) {
-                                $secondEndLine = $i;
-                                break;
-                            }
-                        }
-
-                        return new NestingConsistencyIssue((int) $firstLine, (int) $secondLine, (int) $firstEndLine, (int) $secondEndLine);
-                    }
-                }
-            }
+        if ($firstLine === 0 || $firstEndLine === 0 || $secondEndLine === 0) {
+            return null;
         }
-        return null;
+
+        return new NestingConsistencyIssue($firstLine, $secondLine, $firstEndLine, $secondEndLine);
     }
 }
