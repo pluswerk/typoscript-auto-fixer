@@ -275,34 +275,34 @@ final class IssueFactoryTest extends TestCase
             __CLASS__
         );
 
-        $input      = 'test = dummyline' . PHP_EOL
-                      . 'another = dummy line' . PHP_EOL
-                      . 'last.dummy = line' . PHP_EOL
-                      . 'nest.test = testvalue' . PHP_EOL
-                      . 'nest.bar {' . PHP_EOL
-                      . '  foo = value1234' . PHP_EOL
-                      . '}' . PHP_EOL
-                      . '' . PHP_EOL
-                      . '' . PHP_EOL
-                      . '' . PHP_EOL
-                      . '' . PHP_EOL
-                      . '' . PHP_EOL
-                      . '' . PHP_EOL
-                      . '' . PHP_EOL
-                      . '' . PHP_EOL
-                      . '' . PHP_EOL
-                      . '' . PHP_EOL
-                      . '' . PHP_EOL
-                      . '' . PHP_EOL
-                      . '' . PHP_EOL
-                      . '' . PHP_EOL
-                      . 'nest.bar {' . PHP_EOL
-                      . '  definition = value' . PHP_EOL
-                      . '  another {' . PHP_EOL
-                      . '    level = value2' . PHP_EOL
-                      . '  }' . PHP_EOL
-                      . '}' . PHP_EOL
-                      . '' . PHP_EOL;
+        $input = 'test = dummyline' . PHP_EOL
+                  . 'another = dummy line' . PHP_EOL
+                  . 'last.dummy = line' . PHP_EOL
+                  . 'nest.test = testvalue' . PHP_EOL
+                  . 'nest.bar {' . PHP_EOL
+                  . '  foo = value1234' . PHP_EOL
+                  . '}' . PHP_EOL
+                  . '' . PHP_EOL
+                  . '' . PHP_EOL
+                  . '' . PHP_EOL
+                  . '' . PHP_EOL
+                  . '' . PHP_EOL
+                  . '' . PHP_EOL
+                  . '' . PHP_EOL
+                  . '' . PHP_EOL
+                  . '' . PHP_EOL
+                  . '' . PHP_EOL
+                  . '' . PHP_EOL
+                  . '' . PHP_EOL
+                  . '' . PHP_EOL
+                  . '' . PHP_EOL
+                  . 'nest.bar {' . PHP_EOL
+                  . '  definition = value' . PHP_EOL
+                  . '  another {' . PHP_EOL
+                  . '    level = value2' . PHP_EOL
+                  . '  }' . PHP_EOL
+                  . '}' . PHP_EOL
+                  . '' . PHP_EOL;
 
         $tokenizer = new Tokenizer();
         $tokens = $tokenizer->tokenizeString($input);
