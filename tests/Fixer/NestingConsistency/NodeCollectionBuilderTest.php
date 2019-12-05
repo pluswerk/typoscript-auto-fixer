@@ -70,7 +70,11 @@ final class NodeCollectionBuilderTest extends TestCase
 
         $nodes->add($nest);
 
-        $builtNodes = $this->nodeCollectionBuilder->buildNodeCollectionFromMultiLine(explode(PHP_EOL, $string));
+        $lines = explode(PHP_EOL, $string);
+        array_walk($lines, static function (&$item) {
+            $item = $item . PHP_EOL;
+        });
+        $builtNodes = $this->nodeCollectionBuilder->buildNodeCollectionFromMultiLine($lines);
         $this->assertEquals($nodes, $builtNodes);
     }
 
@@ -260,51 +264,49 @@ final class NodeCollectionBuilderTest extends TestCase
     {
         return [
             [
-                'string' => '
-nest = 1
-nest {
-  bar {
-    line = value12345
-    
-  }
-  foo.both = 1234
-  foo.both {
-    subBoth (
-wert
-new line
-  indent
-    )
-  }
-}',
+                'string' => 'nest = 1' . PHP_EOL
+                            . 'nest {' . PHP_EOL
+                            . '  bar {'. PHP_EOL
+                            . '    line = value12345' . PHP_EOL
+                            . '    ' . PHP_EOL
+                            . '  }' . PHP_EOL
+                            . '  foo.both = 1234' . PHP_EOL
+                            . '  foo.both {' . PHP_EOL
+                            . '    subBoth (' . PHP_EOL
+                            . 'wert' . PHP_EOL
+                            . 'new line' . PHP_EOL
+                            . '  indent' . PHP_EOL
+                            . '    )' . PHP_EOL
+                            . '  }' . PHP_EOL
+                            . '}' . PHP_EOL,
                 'nestValue' => '1',
                 'operator' => Operator::createEqual()
             ],
             [
-                'string' => '
-nest (
-multi
-line
-  first
-  level
-)
-nest {
-  bar {
-    line = value12345
-    
-  }
-  foo.both = 1234
-  foo.both {
-    subBoth (
-wert
-new line
-  indent
-    )
-  }
-}',
-                'nestValue' => 'multi
-line
-  first
-  level',
+                'string' => 'nest (' . PHP_EOL
+                            . 'multi' . PHP_EOL
+                            . 'line' . PHP_EOL
+                            . '  first' . PHP_EOL
+                            . '  level' . PHP_EOL
+                            . ')' . PHP_EOL
+                            . 'nest {' . PHP_EOL
+                            . '  bar {' . PHP_EOL
+                            . '    line = value12345' . PHP_EOL
+                            . '    ' . PHP_EOL
+                            . '  }' . PHP_EOL
+                            . '  foo.both = 1234' . PHP_EOL
+                            . '  foo.both {' . PHP_EOL
+                            . '    subBoth (' . PHP_EOL
+                            . 'wert' . PHP_EOL
+                            . 'new line' . PHP_EOL
+                            . '  indent' . PHP_EOL
+                            . '    )' . PHP_EOL
+                            . '  }' . PHP_EOL
+                            . '}' . PHP_EOL,
+                'nestValue' => 'multi' . PHP_EOL
+                                . 'line'  . PHP_EOL
+                                . '  first' . PHP_EOL
+                                . '  level',
                 'operator' => Operator::createMultiLine()
             ]
         ];

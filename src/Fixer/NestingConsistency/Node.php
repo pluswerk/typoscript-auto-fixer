@@ -161,7 +161,7 @@ final class Node
 
         if ($this->operator instanceof Operator) {
             if ($this->operator->isMultiLine()) {
-                $string .= $indentation . $this->identifier . ' ' . $this->value . PHP_EOL;
+                $string .= $indentation . $this->identifier . ' (' . PHP_EOL . $this->value . PHP_EOL . ')' . PHP_EOL;
             } else {
                 $string .= $indentation . trim($this->identifier . ' ' . $this->operator . ' ' . $this->value) . PHP_EOL;
             }

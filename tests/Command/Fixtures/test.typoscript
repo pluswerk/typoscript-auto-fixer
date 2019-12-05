@@ -27,6 +27,11 @@ nested.another.item = value
 nested {
   another {
     nestedItem = nestedItemValue
+    multiLine (
+multi
+line
+  value
+    )
   }
 }
 
@@ -35,6 +40,15 @@ another {
 
   }
   section = test
+}
+
+test {
+  multiline (
+this
+is
+a
+test
+)
 }
 
 [condition]

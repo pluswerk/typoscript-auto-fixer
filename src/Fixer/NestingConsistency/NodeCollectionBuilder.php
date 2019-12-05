@@ -95,14 +95,14 @@ final class NodeCollectionBuilder
             if ($inMultiLineValue) {
                 if (substr(trim($line), -1, 1) === ')') {
                     $lineString = (empty($prefixes))
-                        ? $leftValue . '(' . PHP_EOL . $multiLineValue . PHP_EOL . ')'
-                        : implode('.', $prefixes) . '.' . $leftValue . '(' . PHP_EOL . $multiLineValue . PHP_EOL . ')';
+                        ? $leftValue . '(' . PHP_EOL . $multiLineValue . ')'
+                        : implode('.', $prefixes) . '.' . $leftValue . '(' . PHP_EOL . $multiLineValue . ')';
                     $assignments[] = new Assignment($lineString);
                     $multiLineValue = '';
                     $leftValue = '';
                     $inMultiLineValue = false;
                 } else {
-                    $multiLineValue .= $line . PHP_EOL;
+                    $multiLineValue .= $line;
                 }
             } elseif (substr(trim($line), -1, 1) === '{') {
                 $prefixes[$level] = trim(rtrim($line, '{'));

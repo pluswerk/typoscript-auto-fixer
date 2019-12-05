@@ -144,7 +144,7 @@ final class NodeTest extends TestCase
                 'expected' => 'foo := appendToList(1,3)' . PHP_EOL
             ],
             [
-                'node' => new Node('foo', '(' . PHP_EOL . 'multi' . PHP_EOL . '  line' . PHP_EOL . ')', Operator::createMultiLine()),
+                'node' => new Node('foo', 'multi' . PHP_EOL . '  line', Operator::createMultiLine()),
                 'expected' => 'foo (' . PHP_EOL . 'multi' . PHP_EOL . '  line' . PHP_EOL . ')' . PHP_EOL
             ]
         ];
@@ -176,7 +176,7 @@ final class NodeTest extends TestCase
         $node = new Node('foo', 'bar', Operator::createEqual(), 2);
         $subNode = new Node(
             'sub',
-            '(' . PHP_EOL . 'multi' . PHP_EOL . '  line' . PHP_EOL . ')',
+            'multi' . PHP_EOL . '  line',
             Operator::createMultiLine()
         );
 
