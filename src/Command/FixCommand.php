@@ -4,10 +4,12 @@ declare(strict_types=1);
 namespace Pluswerk\TypoScriptAutoFixer\Command;
 
 use Pluswerk\TypoScriptAutoFixer\Adapter\Configuration\Configuration;
+use Pluswerk\TypoScriptAutoFixer\Adapter\Configuration\Reader\YamlConfigurationReader;
 use Pluswerk\TypoScriptAutoFixer\Fixer\IssueFixer;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 final class FixCommand extends Command
@@ -27,6 +29,19 @@ final class FixCommand extends Command
     protected function configure()
     {
         $this->addArgument('files', InputArgument::IS_ARRAY, 'files to fix', []);
+        $this->addOption(
+            'typoscript-linter-configuration',
+            't',
+            InputOption::VALUE_NONE,
+            'if set the configuration file style is the typoscript-lint.yml file style'
+        );
+        $this->addOption(
+            'configuration-file',
+            'c',
+            InputOption::VALUE_REQUIRED,
+            'if set the configuration file of given path is used!',
+            ''
+        );
     }
 
     /**
@@ -37,9 +52,9 @@ final class FixCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
-        $configuration = Configuration::getInstance();
-        $configuration->init();
+        $this->initConfiguration($input);
         $files = $input->getArgument('files');
+
         if (count($files) > 0) {
             foreach ($files as $file) {
                 if (is_file($file)) {
@@ -48,5 +63,25 @@ final class FixCommand extends Command
             }
         }
         return 0;
+    }
+
+    /**
+     * @param InputInterface $input
+     */
+    private function initConfiguration(InputInterface $input): void
+    {
+        $configuration = Configuration::getInstance();
+        $configReader = null;
+
+        if ($input->getOption('typoscript-linter-configuration')) {
+            $configReader = new YamlConfigurationReader();
+        }
+
+        $configurationFile = $input->getOption('configuration-file');
+        if ($configurationFile !== '') {
+            $configReader = new YamlConfigurationReader($configurationFile);
+        }
+
+        $configuration->init($configReader);
     }
 }

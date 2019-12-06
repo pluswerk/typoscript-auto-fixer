@@ -136,6 +136,11 @@ class File extends \SplFileInfo
 
         $lastLineWasEmpty = false;
 
+        $firstLine = $fileObject->current();
+        if ($firstLine === PHP_EOL || $firstLine === '') {
+            $fileObject->next();
+        }
+
         while (!$fileObject->eof()) {
             $current = $fileObject->current();
             if (trim($current) === '') {
