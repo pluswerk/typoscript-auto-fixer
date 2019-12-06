@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Pluswerk\TypoScriptAutoFixer\Command;
 
+use Pluswerk\TypoScriptAutoFixer\Adapter\Configuration\Configuration;
 use Pluswerk\TypoScriptAutoFixer\Fixer\IssueFixer;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -36,6 +37,8 @@ final class FixCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
+        $configuration = Configuration::getInstance();
+        $configuration->init();
         $files = $input->getArgument('files');
         if (count($files) > 0) {
             foreach ($files as $file) {

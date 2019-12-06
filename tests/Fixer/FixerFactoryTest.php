@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace Pluswerk\TypoScriptAutoFixer\Tests\Fixer;
 
 use PHPUnit\Framework\TestCase;
+use Pluswerk\TypoScriptAutoFixer\Adapter\Configuration\Configuration;
+use Pluswerk\TypoScriptAutoFixer\Exception\ConfigurationInstantiationException;
 use Pluswerk\TypoScriptAutoFixer\Exception\FixerNotFoundException;
 use Pluswerk\TypoScriptAutoFixer\Fixer\EmptySection\EmptySectionFixer;
 use Pluswerk\TypoScriptAutoFixer\Fixer\NestingConsistency\NestingConsistencyFixer;
@@ -43,6 +45,14 @@ final class FixerFactoryTest extends TestCase //phpcs:ignore
      */
     public function forAIssueTheCorrectFixerIsCreated($issue, $expeted): void
     {
+        try {
+            $config = Configuration::getInstance();
+            $config->init();
+        } catch (ConfigurationInstantiationException $e) {
+            Configuration::destroyInstance();
+            $config = Configuration::getInstance();
+            $config->init();
+        }
         $fixer = $this->fixerFactory->getFixerByIssue($issue);
         $this->assertInstanceOf($expeted, $fixer);
     }

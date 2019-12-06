@@ -1,0 +1,24 @@
+parameters:
+  git_dir: .
+  bin_dir: .Build/bin
+  ascii:
+    failed: ./.Build/vendor/pluswerk/grumphp-config/logo.txt
+    succeeded: ./.Build/vendor/pluswerk/grumphp-config/logo.txt
+  tasks:
+    typoscriptlint:
+      sniffs:
+        - class: Indentation
+          parameters:
+            useSpaces: true
+            indentPerLevel: 2
+            indentConditions: true
+        - class: RepeatingRValue
+        - class: DeadCode
+        - class: OperatorWhitespace
+        - class: DuplicateAssignment
+        - class: EmptySection
+        - class: NestingConsistency
+          parameters:
+            commonPathPrefixThreshold: 1
+      paths: []
+      filePatterns: []

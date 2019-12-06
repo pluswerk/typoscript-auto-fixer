@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Pluswerk\TypoScriptAutoFixer\Fixer\NestingConsistency;
 
+use Pluswerk\TypoScriptAutoFixer\Adapter\Configuration\Configuration;
 use Pluswerk\TypoScriptAutoFixer\Exception\NodeTitleMustNotBeEmptyException;
 
 final class Node
@@ -155,8 +156,8 @@ final class Node
      */
     public function __toString(): string
     {
-        // todo: use indentation from configuration
-        $indentation = str_repeat('  ', $this->level);
+        $configuration = Configuration::getInstance();
+        $indentation = str_repeat($configuration->oneLevelIndentationString(), $this->level);
         $string = '';
 
         if ($this->operator instanceof Operator) {

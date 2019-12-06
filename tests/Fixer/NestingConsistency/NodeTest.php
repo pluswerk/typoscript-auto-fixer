@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Pluswerk\TypoScriptAutoFixer\Tests\Fixer\NestedConsistency;
 
 use PHPUnit\Framework\TestCase;
+use Pluswerk\TypoScriptAutoFixer\Adapter\Configuration\Configuration;
 use Pluswerk\TypoScriptAutoFixer\Exception\NodeTitleMustNotBeEmptyException;
 use Pluswerk\TypoScriptAutoFixer\Fixer\NestingConsistency\Node;
 use Pluswerk\TypoScriptAutoFixer\Fixer\NestingConsistency\NodeCollection;
@@ -16,6 +17,13 @@ use Pluswerk\TypoScriptAutoFixer\Fixer\NestingConsistency\Operator;
  */
 final class NodeTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $configuration = Configuration::getInstance();
+        $configuration->init();
+    }
+
     /**
      * @test
      */

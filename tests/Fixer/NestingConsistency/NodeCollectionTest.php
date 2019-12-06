@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Pluswerk\TypoScriptAutoFixer\Tests\Fixer\NestedConsistency;
 
 use PHPUnit\Framework\TestCase;
+use Pluswerk\TypoScriptAutoFixer\Adapter\Configuration\Configuration;
 use Pluswerk\TypoScriptAutoFixer\Fixer\NestingConsistency\NodeCollection;
 use Pluswerk\TypoScriptAutoFixer\Fixer\NestingConsistency\Node;
 use Pluswerk\TypoScriptAutoFixer\Fixer\NestingConsistency\Operator;
@@ -23,6 +24,8 @@ final class NodeCollectionTest extends TestCase
     protected function setUp(): void
     {
         $this->nodeCollection = new NodeCollection();
+        $configuration = Configuration::getInstance();
+        $configuration->init();
     }
 
     /**
