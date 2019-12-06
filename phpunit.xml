@@ -8,9 +8,6 @@
          beStrictAboutOutputDuringTests="true"
          beStrictAboutTodoAnnotatedTests="true"
          verbose="true">
-    <extensions>
-        <extension class="Pluswerk\TypoScriptAutoFixer\Hook\BypassFinalHook"/>
-    </extensions>
     <testsuites>
         <testsuite name="default">
             <directory suffix="Test.php">tests</directory>

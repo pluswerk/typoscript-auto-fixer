@@ -7,7 +7,7 @@ use Pluswerk\TypoScriptAutoFixer\Exception\FileNotWritableException;
 use Pluswerk\TypoScriptAutoFixer\Exception\WriteFileFailedException;
 use Pluswerk\TypoScriptAutoFixer\Issue\IssueCollection;
 
-final class File extends \SplFileInfo
+class File extends \SplFileInfo
 {
     /**
      * @var IssueCollection

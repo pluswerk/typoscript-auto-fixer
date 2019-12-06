@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Pluswerk\TypoScriptAutoFixer\Fixer\Indentation;
 
-final class LineFixer
+class LineFixer
 {
     /**
      * @param $line

@@ -6,7 +6,7 @@ namespace Pluswerk\TypoScriptAutoFixer\Issue;
 use Helmich\TypoScriptLint\Linter\Report\Issue;
 use Pluswerk\TypoScriptAutoFixer\Issue\AbstractIssue;
 
-final class IssueCollection implements \Countable, \Iterator
+class IssueCollection implements \Countable, \Iterator
 {
     /**
      * @var AbstractIssue[]

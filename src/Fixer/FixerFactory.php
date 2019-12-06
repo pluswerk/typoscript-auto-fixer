@@ -14,7 +14,7 @@ use Pluswerk\TypoScriptAutoFixer\Issue\IndentationIssue;
 use Pluswerk\TypoScriptAutoFixer\Issue\NestingConsistencyIssue;
 use Pluswerk\TypoScriptAutoFixer\Issue\OperatorWhitespaceIssue;
 
-final class FixerFactory
+class FixerFactory
 {
     /**
      * @param AbstractIssue $issue

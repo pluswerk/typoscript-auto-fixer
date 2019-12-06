@@ -5,7 +5,7 @@ namespace Pluswerk\TypoScriptAutoFixer;
 
 use Pluswerk\TypoScriptAutoFixer\Adapter\Linter;
 
-final class FileBuilder
+class FileBuilder
 {
     /**
      * @var Linter

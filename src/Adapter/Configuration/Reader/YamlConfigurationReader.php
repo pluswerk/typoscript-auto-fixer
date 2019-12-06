@@ -6,7 +6,7 @@ namespace Pluswerk\TypoScriptAutoFixer\Adapter\Configuration\Reader;
 use Pluswerk\TypoScriptAutoFixer\Exception\FailedReadConfigurationException;
 use Symfony\Component\Yaml\Yaml;
 
-class YamlConfigurationReader extends AbstractConfigurationReader
+final class YamlConfigurationReader extends AbstractConfigurationReader
 {
     public function __construct(string $filePath = '')
     {

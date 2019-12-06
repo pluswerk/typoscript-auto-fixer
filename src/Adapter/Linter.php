@@ -12,7 +12,7 @@ use Pluswerk\TypoScriptAutoFixer\Adapter\Configuration\Configuration;
 use Pluswerk\TypoScriptAutoFixer\Issue\AbstractIssue;
 use Pluswerk\TypoScriptAutoFixer\Issue\IssueCollection;
 
-final class Linter
+class Linter
 {
     /**
      * @var Configuration
