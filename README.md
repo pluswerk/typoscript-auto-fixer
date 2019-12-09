@@ -39,13 +39,29 @@ There is a default configuration, so no configuration must be given.
 
 ## Configuration
 
+The fixes are done based on the typoscript linter configuration. Only if a sniffer class is configured the
+corresponding fixer is executed.
+
+The configuration is the same as [martin-helmich/typo3-typoscript-lint](https://github.com/martin-helmich/typo3-typoscript-lint).
+
+If grumphp is used the configuration is done as here: [pluswerk/grumphp-typoscript-task](https://github.com/pluswerk/grumphp-typoscript-task).
+
+### Fixers exist for following sniffer classes
+
+* EmptySection
+* OperatorWhitespace
+* Indentation
+* NestingConsistency
+
+For details see What is fixed section
+
 ## What is fixed
 
 ### Line breaks
 
 Multiple empty lines are reduced to one empty line.
 
-### Operator whitespaces
+### Operator whitespaces (configuration class: OperatorWhitespace)
 
 #### Example
 
@@ -59,7 +75,7 @@ __fixed:__
 foo = bar
 ```
 
-### Indentation
+### Indentation (configuration class: Indentation)
 
 Depending on configuration the indentation is fixed. Possible characters:
 
@@ -87,7 +103,7 @@ foo {
 }
 ```
 
-### Empty section
+### Empty section (configuration class: EmptySection)
 
 Empty sections are removed.
 
@@ -111,7 +127,7 @@ bar = value
 another = foo
 ```
 
-### Nesting consistency
+### Nesting consistency (configuration class: NestingConsistency)
 
 Nesting consistency is built if paths can be merged in a file. Indentation is used like described above in indentation fixer.
 
