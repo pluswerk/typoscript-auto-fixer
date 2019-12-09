@@ -7,7 +7,7 @@
 This is an auto fixer for TYPO3 TypoScript code style based on
  [martin-helmich/typo3-typoscript-lint](https://github.com/martin-helmich/typo3-typoscript-lint) of Martin Helmich.
 
-##Quick guide
+## Quick guide
 
 ### Composer
 
