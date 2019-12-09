@@ -118,3 +118,26 @@ foo {
   }
 }
 ```
+
+## Usage
+
+
+### Basic usage
+
+```bash
+./vendor/bin/tscsf [options] [file] [file] [...]
+```
+
+### Options
+
+| Option                                | Description                                                  |
+|---------------------------------------|--------------------------------------------------------------|
+| -t, --typoscript-linter-configuration | Use typoscript-lint.yml file                                 |
+| -g, --grumphp-configuration           | Use grumphp.yml file                                         |
+| -c, --configuration-file              | For both options (-t, -g) a different file path can be given.|
+
+#### Example
+
+```bash
+./vendor/bin/tscsf -g -c another-grumphp.yml some.typoscript other.typoscript
+```
