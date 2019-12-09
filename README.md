@@ -61,6 +61,24 @@ For details see What is fixed section
 
 Multiple empty lines are reduced to one empty line.
 
+#### Example
+
+```typo3_typoscript
+foo.bar = value
+
+
+
+another.foo = value2
+```
+
+__fixed:__
+
+```typo3_typoscript
+foo.bar = value
+
+another.foo = value2
+```
+
 ### Operator whitespaces (configuration class: OperatorWhitespace)
 
 #### Example
