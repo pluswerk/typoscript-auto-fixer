@@ -1,0 +1,11 @@
+nested {
+definition = value
+  another {
+    level = value2
+    line < value3
+  delete >
+  reference =< tmp.object
+  }
+}
+
+another.stuff = value

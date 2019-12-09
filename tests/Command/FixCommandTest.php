@@ -55,14 +55,12 @@ final class FixCommandTest extends TestCase
 
     public function configurationFileProvider(): array
     {
-        $expectedFile = __DIR__ . '/Fixtures/expected.typoscript';
-        $filePathName = __DIR__ . '/Fixtures/test.typoscript';
         $filePathToFix = __DIR__ . '/Fixtures/tmp_test.typoscript';
 
         return [
             'internal default configuration' => [
-                'expectedFile' => $expectedFile,
-                'filePathName' => $filePathName,
+                'expectedFile' => __DIR__ . '/Fixtures/expected.typoscript',
+                'filePathName' => __DIR__ . '/Fixtures/test.typoscript',
                 'filePathToFix' => $filePathToFix,
                 'executeArray' => ['files' => [$filePathToFix]]
             ],
@@ -72,11 +70,23 @@ final class FixCommandTest extends TestCase
                 'filePathToFix' => $filePathToFix,
                 'executeArray' => ['-t' => true, 'files' => [$filePathToFix]]
             ],
+            'grumphp configuration' => [
+                'expectedFile' => __DIR__ . '/Fixtures/expected-grumphp-configuration.typoscript',
+                'filePathName' => __DIR__ . '/Fixtures/test-grumphp-configuration.typoscript',
+                'filePathToFix' => $filePathToFix,
+                'executeArray' => ['-g' => true, 'files' => [$filePathToFix]]
+            ],
             'different name of typoscript lint configuration' => [
                 'expectedFile' => __DIR__ . '/Fixtures/expected-different-name-configuration.typoscript',
                 'filePathName' => __DIR__ . '/Fixtures/test-different-name-configuration.typoscript',
                 'filePathToFix' => $filePathToFix,
                 'executeArray' => ['-t' => true, '-c' => 'different-name.yml', 'files' => [$filePathToFix]]
+            ],
+            'different name of grumphp configuration' => [
+                'expectedFile' => __DIR__ . '/Fixtures/expected-different-grumphp-configuration.typoscript',
+                'filePathName' => __DIR__ . '/Fixtures/test-different-grumphp-configuration.typoscript',
+                'filePathToFix' => $filePathToFix,
+                'executeArray' => ['-g' => true, '-c' => 'different-grumphp.yml', 'files' => [$filePathToFix]]
             ]
         ];
     }
@@ -86,13 +96,21 @@ final class FixCommandTest extends TestCase
         $basePath = getcwd();
         $typoScriptLintFixtureConfigFile = __DIR__ . '/Fixtures/typoscript-lint.yml';
         $typoScriptLintFixtureConfigFileDifferentName = __DIR__ . '/Fixtures/different-name.yml';
+        $grumphpFixtureConfigFile = __DIR__ . '/Fixtures/grumphp.yml';
+        $grumphpFixtureConfigFileDifferentName = __DIR__ . '/Fixtures/different-grumphp.yml';
 
         if (file_exists($basePath . '/typoscript-lint.yml')) {
             rename($basePath . '/typoscript-lint.yml', $basePath . '/original-typoscript-lint.yml');
         }
 
+        if (file_exists($basePath . '/grumphp.yml')) {
+            rename($basePath . '/grumphp.yml', $basePath . '/original-grumphp.yml');
+        }
+
         copy($typoScriptLintFixtureConfigFile, $basePath . '/typoscript-lint.yml');
         copy($typoScriptLintFixtureConfigFileDifferentName, $basePath . '/different-name.yml');
+        copy($grumphpFixtureConfigFile, $basePath . '/grumphp.yml');
+        copy($grumphpFixtureConfigFileDifferentName, $basePath . '/different-grumphp.yml');
     }
 
     private function deleteAndRestoreClonfigfiles()
@@ -101,9 +119,15 @@ final class FixCommandTest extends TestCase
 
         unlink($basePath . '/typoscript-lint.yml');
         unlink($basePath . '/different-name.yml');
+        unlink($basePath . '/grumphp.yml');
+        unlink($basePath . '/different-grumphp.yml');
 
         if (file_exists($basePath . '/original-typoscript-lint.yml')) {
             rename($basePath . '/original-typoscript-lint.yml', $basePath . '/typoscript-lint.yml');
+        }
+
+        if (file_exists($basePath . '/original-grumphp.yml')) {
+            rename($basePath . '/original-grumphp.yml', $basePath . '/grumphp.yml');
         }
     }
 }

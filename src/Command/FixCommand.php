@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Pluswerk\TypoScriptAutoFixer\Command;
 
 use Pluswerk\TypoScriptAutoFixer\Adapter\Configuration\Configuration;
+use Pluswerk\TypoScriptAutoFixer\Adapter\Configuration\Reader\GrumphpConfigurationReader;
 use Pluswerk\TypoScriptAutoFixer\Adapter\Configuration\Reader\YamlConfigurationReader;
 use Pluswerk\TypoScriptAutoFixer\Fixer\IssueFixer;
 use Symfony\Component\Console\Command\Command;
@@ -34,6 +35,12 @@ final class FixCommand extends Command
             't',
             InputOption::VALUE_NONE,
             'if set the configuration file style is the typoscript-lint.yml file style'
+        );
+        $this->addOption(
+            'grumphp-configuration',
+            'g',
+            InputOption::VALUE_NONE,
+            'if set the configuration file style is the grumphp.yml file style'
         );
         $this->addOption(
             'configuration-file',
@@ -75,11 +82,18 @@ final class FixCommand extends Command
 
         if ($input->getOption('typoscript-linter-configuration')) {
             $configReader = new YamlConfigurationReader();
+        } elseif ($input->getOption('grumphp-configuration')) {
+            $configReader = new GrumphpConfigurationReader();
         }
 
         $configurationFile = $input->getOption('configuration-file');
-        if ($configurationFile !== '') {
+
+        if ($configurationFile !== '' && $input->getOption('typoscript-linter-configuration')) {
             $configReader = new YamlConfigurationReader($configurationFile);
+        }
+
+        if ($configurationFile !== '' && $input->getOption('grumphp-configuration')) {
+            $configReader = new GrumphpConfigurationReader($configurationFile);
         }
 
         $configuration->init($configReader);

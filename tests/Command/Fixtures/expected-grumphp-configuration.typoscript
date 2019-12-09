@@ -1,0 +1,17 @@
+nested {
+  definition = value
+  another {
+    level = value2
+    line < value3
+    delete >
+    reference =< tmp.object
+    nestedItem = nestedItemValue
+    multiLine (
+multi
+line
+  value
+)
+  }
+}
+
+another.stuff=value
