@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Pluswerk\TypoScriptAutoFixer;
 
+use Exception;
 use Pluswerk\TypoScriptAutoFixer\Adapter\Linter;
 
 class FileBuilder
@@ -10,7 +11,7 @@ class FileBuilder
     /**
      * @var Linter
      */
-    private $linter;
+    private Linter $linter;
 
     /**
      * FileBuilder constructor.
@@ -26,6 +27,7 @@ class FileBuilder
      * @param string $filePath
      *
      * @return File
+     * @throws Exception
      */
     public function buildFile(string $filePath): File
     {
