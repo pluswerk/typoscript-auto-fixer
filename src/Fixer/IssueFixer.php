@@ -32,7 +32,7 @@ final class IssueFixer
     {
         $file = $this->fileBuilder->buildFile($filePath);
         $count = 0;
-        while ($file->issues()->count() > 0 && $count < 50) {
+        while ($file->issues()->count() > 0 && $count < 1000) {
             $issue = $file->issues()->current();
             $fixer = $this->fixerFactory->getFixerByIssue($issue);
             $file = $fixer->fixIssue($file, $issue);
