@@ -8,7 +8,7 @@ This is an auto fixer for TYPO3 TypoScript code style based on
 ### Composer
 
 ```
-composer require --dev pluswerk/typoscript-auto-fixer
+composer require --dev macopedia/typoscript-auto-fixer:@dev
 ```
 
 There is a default configuration, so no configuration must be given.
@@ -33,6 +33,10 @@ There is a default configuration, so no configuration must be given.
 
 ```bash
 ./vendor/bin/tscsf -g -c another-grumphp.yml some.typoscript other.typoscript
+```
+
+```bash
+./vendor/bin/tscsf -c build/ts_lint.yml some.typoscript other.typoscript
 ```
 
 ## Configuration
