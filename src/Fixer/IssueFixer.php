@@ -15,7 +15,7 @@ final class IssueFixer
     /**
      * @var FixerFactory
      */
-    private $fixerFactory;
+    private FixerFactory $fixerFactory;
 
     public function __construct(FileBuilder $fileBuilder = null, FixerFactory $fixerFactory = null)
     {
