@@ -12,7 +12,7 @@ class File extends \SplFileInfo
     /**
      * @var IssueCollection
      */
-    private $issues;
+    private IssueCollection $issues;
 
     public function __construct($file_name)
     {
