@@ -182,3 +182,6 @@ foo {
 ## Author
 
 The author of the package is [Pluswerk AG](https://github.com/pluswerk/typoscript-auto-fixer)
+
+## Update
+Update for TYPO3v11
