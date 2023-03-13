@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Pluswerk\TypoScriptAutoFixer\Fixer;
 
+use Exception;
 use Pluswerk\TypoScriptAutoFixer\FileBuilder;
 
 final class IssueFixer
@@ -10,7 +11,7 @@ final class IssueFixer
     /**
      * @var FileBuilder
      */
-    private $fileBuilder;
+    private FileBuilder $fileBuilder;
 
     /**
      * @var FixerFactory
@@ -25,6 +26,7 @@ final class IssueFixer
 
     /**
      * @param string $filePath
+     * @throws Exception
      */
     public function fixIssuesForFile(string $filePath): void
     {
