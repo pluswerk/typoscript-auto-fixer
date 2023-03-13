@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Pluswerk\TypoScriptAutoFixer\Command;
 
+use Exception;
 use Pluswerk\TypoScriptAutoFixer\Adapter\Configuration\Configuration;
 use Pluswerk\TypoScriptAutoFixer\Adapter\Configuration\Reader\GrumphpConfigurationReader;
 use Pluswerk\TypoScriptAutoFixer\Adapter\Configuration\Reader\YamlConfigurationReader;
@@ -18,7 +19,7 @@ final class FixCommand extends Command
     /**
      * @var IssueFixer
      */
-    private $issueFixer;
+    private IssueFixer $issueFixer;
 
     public function __construct(string $name = null)
     {
@@ -27,7 +28,10 @@ final class FixCommand extends Command
         $this->issueFixer = new IssueFixer();
     }
 
-    protected function configure()
+    /**
+     * @return void
+     */
+    protected function configure(): void
     {
         $this->addArgument('files', InputArgument::IS_ARRAY, 'files to fix', []);
         $this->addOption(
@@ -52,10 +56,11 @@ final class FixCommand extends Command
     }
 
     /**
-     * @param InputInterface  $input
+     * @param InputInterface $input
      * @param OutputInterface $output
      *
      * @return int|null
+     * @throws Exception
      */
     protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
@@ -64,12 +69,50 @@ final class FixCommand extends Command
 
         if (count($files) > 0) {
             foreach ($files as $file) {
-                if (is_file($file)) {
+                if ($this->isTypoScript($file)) {
                     $this->issueFixer->fixIssuesForFile($file);
+                } elseif (is_dir($file)) {
+                    $dir = $this->getDirContents($file);
+                    foreach($dir as $entry) {
+                        if ($this->isTypoScript($entry)) {
+                            $this->issueFixer->fixIssuesForFile($entry);
+                        }
+                    }
                 }
             }
         }
         return 0;
+    }
+
+    /**
+     * @param $dir
+     * @param array $results
+     * @return array
+     */
+    private function getDirContents($dir, array &$results = []): array
+    {
+        $results = [];
+        $files = scandir($dir);
+        foreach ($files as $key => $value) {
+            $path = realpath($dir . DIRECTORY_SEPARATOR . $value);
+            if (!is_dir($path)) {
+                $results[] = $path;
+            } else if ($value !== '.' && $value !== '..') {
+                $this->getDirContents($path, $results);
+                $results[] = $path;
+            }
+        }
+
+        return $results;
+    }
+
+    /**
+     * @param $file
+     * @return bool
+     */
+    private function isTypoScript($file): bool
+    {
+        return is_file($file) && pathinfo($file, PATHINFO_EXTENSION) === 'typoscript';
     }
 
     /**

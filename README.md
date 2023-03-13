@@ -18,7 +18,7 @@ There is a default configuration, so no configuration must be given.
 ### Basic usage
 
 ```bash
-./vendor/bin/tscsf [options] [file] [file] [...]
+./vendor/bin/tscsf [options] [file] [path] [file] [path] [...]
 ```
 
 ### Options
@@ -32,11 +32,11 @@ There is a default configuration, so no configuration must be given.
 #### Example
 
 ```bash
-./vendor/bin/tscsf -g -c another-grumphp.yml some.typoscript other.typoscript
+./vendor/bin/tscsf -g -c another-grumphp.yml some.typoscript /path/packages-1 other.typoscript /path/packages-2
 ```
 
 ```bash
-./vendor/bin/tscsf -c build/ts_lint.yml some.typoscript other.typoscript
+./vendor/bin/tscsf -c build/ts_lint.yml some.typoscript /path/packages-1 other.typoscript /path/packages-2
 ```
 
 ## Configuration
