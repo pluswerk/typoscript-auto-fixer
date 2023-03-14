@@ -100,7 +100,6 @@ final class FixCommand extends Command
                     $count++;
                 }
                 $output->writeln('');
-                $output->writeln('');
                 $output->writeln('Checked files:');
                 $table->render();
             } else {
