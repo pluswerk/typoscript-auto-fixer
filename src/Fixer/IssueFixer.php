@@ -29,27 +29,28 @@ final class IssueFixer
     /**
      * @param string $filePath
      * @param OutputInterface $output
-     * @param ProgressBar $progressBarSub
      * @throws Exception
      */
-    public function fixIssuesForFile(string $filePath, OutputInterface $output, ProgressBar $progressBarSub): void
+    public function fixIssuesForFile(string $filePath, OutputInterface $output): void
     {
         $file = $this->fileBuilder->buildFile($filePath);
 
         if ($file->issues()->count() > 0) {
-            $progressBarSub->setMaxSteps($file->issues()->count());
-            $progressBarSub->start();
+            ProgressBar::setFormatDefinition('file', '%current%/%max% [%bar%] %percent:3s%% File: %file%');
+            $progressBar = new ProgressBar($output, $file->issues()->count());
+            $progressBar->setFormat('file');
+            $progressBar->start();
 
             while ($file->issues()->count() > 0) {
-                $progressBarSub->setMessage($filePath, 'file');
+                $progressBar->setMessage($filePath, 'file');
                 $issue = $file->issues()->current();
                 $fixer = $this->fixerFactory->getFixerByIssue($issue);
                 $file = $fixer->fixIssue($file, $issue);
-                $progressBarSub->advance();
+                $progressBar->advance();
                 usleep(1000);
             }
             $file->removeNeedlessEmptyLines();
-            $progressBarSub->finish();
+            $progressBar->finish();
             $output->writeln('');
         }
     }

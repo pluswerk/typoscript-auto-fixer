@@ -9,7 +9,6 @@ use Pluswerk\TypoScriptAutoFixer\Adapter\Configuration\Reader\GrumphpConfigurati
 use Pluswerk\TypoScriptAutoFixer\Adapter\Configuration\Reader\YamlConfigurationReader;
 use Pluswerk\TypoScriptAutoFixer\Fixer\IssueFixer;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -89,38 +88,26 @@ final class FixCommand extends Command
             }
 
             if (count($this->filesList) > 0) {
-                ProgressBar::setFormatDefinition('files', '%current%/%max% [%bar%] %percent:3s%% %files%');
-                ProgressBar::setFormatDefinition('file', '%current%/%max% [%bar%] %percent:3s%% File in progress: %file%');
-
-                $progressBarMain = new ProgressBar($output, count($this->filesList));
-                $progressBarSub = new ProgressBar($output);
                 $table = new Table($output);
-
-                $progressBarMain->setFormat('files');
-                $progressBarSub->setFormat('file');
-
-                $progressBarMain->start();
 
                 $count = 1;
                 foreach ($this->filesList as $file) {
-                    $progressBarMain->setMessage($file, 'files');
-
                     $table->addRow([
                         sprintf('# %s', $count),
                         $file
                     ]);
-                    $this->issueFixer->fixIssuesForFile($file, $output, $progressBarSub);
-                    $progressBarMain->advance();
+                    $this->issueFixer->fixIssuesForFile($file, $output);
                     $count++;
                 }
-                $progressBarMain->setMessage('', 'files');
-                $progressBarMain->finish();
                 $output->writeln('');
                 $output->writeln('');
-
-                $output->writeln('Processed files:');
+                $output->writeln('Checked files:');
                 $table->render();
+            } else {
+                $output->writeln('No TypoScript files found');
             }
+        } else {
+            $output->writeln('Path and files not specified');
         }
         return 0;
     }
