@@ -91,7 +91,6 @@ final class FixCommand extends Command
      */
     private function getDirContents($dir, array &$results = []): array
     {
-        $results = [];
         $files = scandir($dir);
         foreach ($files as $key => $value) {
             $path = realpath($dir . DIRECTORY_SEPARATOR . $value);
