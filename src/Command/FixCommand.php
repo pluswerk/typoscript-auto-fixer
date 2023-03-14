@@ -9,6 +9,8 @@ use Pluswerk\TypoScriptAutoFixer\Adapter\Configuration\Reader\GrumphpConfigurati
 use Pluswerk\TypoScriptAutoFixer\Adapter\Configuration\Reader\YamlConfigurationReader;
 use Pluswerk\TypoScriptAutoFixer\Fixer\IssueFixer;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\ProgressBar;
+use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -20,6 +22,11 @@ final class FixCommand extends Command
      * @var IssueFixer
      */
     private IssueFixer $issueFixer;
+
+    /**
+     * @var array
+     */
+    private array $filesList = [];
 
     public function __construct(string $name = null)
     {
@@ -65,20 +72,54 @@ final class FixCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
         $this->initConfiguration($input);
-        $files = $input->getArgument('files');
+        $filesArguments = $input->getArgument('files');
 
-        if (count($files) > 0) {
-            foreach ($files as $file) {
-                if ($this->isTypoScript($file)) {
-                    $this->issueFixer->fixIssuesForFile($file);
-                } elseif (is_dir($file)) {
-                    $dir = $this->getDirContents($file);
-                    foreach($dir as $entry) {
-                        if ($this->isTypoScript($entry)) {
-                            $this->issueFixer->fixIssuesForFile($entry);
+        if (count($filesArguments) > 0) {
+            foreach ($filesArguments as $fileArgument) {
+                if ($this->isTypoScript($fileArgument)) {
+                    $this->filesList[] = $fileArgument;
+                } elseif (is_dir($fileArgument)) {
+                    $dirContents = $this->getDirContents($fileArgument);
+                    foreach($dirContents as $dirContent) {
+                        if ($this->isTypoScript($dirContent)) {
+                            $this->filesList[] = $dirContent;
                         }
                     }
                 }
+            }
+
+            if (count($this->filesList) > 0) {
+                ProgressBar::setFormatDefinition('files', '%current%/%max% [%bar%] %percent:3s%% %files%');
+                ProgressBar::setFormatDefinition('file', '%current%/%max% [%bar%] %percent:3s%% File in progress: %file%');
+
+                $progressBarMain = new ProgressBar($output, count($this->filesList));
+                $progressBarSub = new ProgressBar($output);
+                $table = new Table($output);
+
+                $progressBarMain->setFormat('files');
+                $progressBarSub->setFormat('file');
+
+                $progressBarMain->start();
+
+                $count = 1;
+                foreach ($this->filesList as $file) {
+                    $progressBarMain->setMessage($file, 'files');
+
+                    $table->addRow([
+                        sprintf('# %s', $count),
+                        $file
+                    ]);
+                    $this->issueFixer->fixIssuesForFile($file, $output, $progressBarSub);
+                    $progressBarMain->advance();
+                    $count++;
+                }
+                $progressBarMain->setMessage('', 'files');
+                $progressBarMain->finish();
+                $output->writeln('');
+                $output->writeln('');
+
+                $output->writeln('Processed files:');
+                $table->render();
             }
         }
         return 0;
