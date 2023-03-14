@@ -1,9 +1,3 @@
-[![Packagist](https://img.shields.io/packagist/v/pluswerk/typoscript-auto-fixer.svg?style=flat-square)](https://packagist.org/packages/pluswerk/typoscript-auto-fixer)
-[![Packagist](https://img.shields.io/packagist/l/pluswerk/typoscript-auto-fixer.svg?style=flat-square)](https://opensource.org/licenses/LGPL-3.0)
-[![Build Status](https://travis-ci.com/pluswerk/typoscript-auto-fixer.svg?branch=master)](https://travis-ci.com/pluswerk/typoscript-auto-fixer)
-[![Coverage Status](https://img.shields.io/codecov/c/gh/pluswerk/typoscript-auto-fixer.svg?style=flat-square)](https://codecov.io/gh/pluswerk/typoscript-auto-fixer)
-[![Quality Score](https://img.shields.io/scrutinizer/g/pluswerk/typoscript-auto-fixer.svg?style=flat-square)](https://scrutinizer-ci.com/g/pluswerk/typoscript-auto-fixer)
-
 # typoscript-auto-fixer
 
 This is an auto fixer for TYPO3 TypoScript code style based on
@@ -13,7 +7,9 @@ This is an auto fixer for TYPO3 TypoScript code style based on
 
 ### Composer
 
-``composer require --dev pluswerk/typoscript-auto-fixer``
+```
+composer require --dev macopedia/typoscript-auto-fixer:@dev
+```
 
 There is a default configuration, so no configuration must be given.
 
@@ -22,7 +18,7 @@ There is a default configuration, so no configuration must be given.
 ### Basic usage
 
 ```bash
-./vendor/bin/tscsf [options] [file] [file] [...]
+./vendor/bin/tscsf [options] [file] [path] [file] [path] [...]
 ```
 
 ### Options
@@ -36,7 +32,11 @@ There is a default configuration, so no configuration must be given.
 #### Example
 
 ```bash
-./vendor/bin/tscsf -g -c another-grumphp.yml some.typoscript other.typoscript
+./vendor/bin/tscsf -g -c another-grumphp.yml some.typoscript /path/packages-1 other.typoscript /path/packages-2
+```
+
+```bash
+./vendor/bin/tscsf -c build/ts_lint.yml some.typoscript /path/packages-1 other.typoscript /path/packages-2
 ```
 
 ## Configuration
@@ -178,3 +178,14 @@ foo {
   }
 }
 ```
+
+## Author
+
+The author of the package is [Pluswerk AG](https://github.com/pluswerk/typoscript-auto-fixer)
+
+## Update
+
+- Update for TYPO3v11
+- Add search function for TypoScript files in given path
+- Add a progress bar
+- Add info with list of processed files

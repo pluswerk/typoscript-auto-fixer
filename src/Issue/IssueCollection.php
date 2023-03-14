@@ -11,7 +11,7 @@ class IssueCollection implements \Countable, \Iterator
     /**
      * @var AbstractIssue[]
      */
-    private $issues = [];
+    private array $issues = [];
 
     /**
      * @param AbstractIssue $issue
