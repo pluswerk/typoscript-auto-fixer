@@ -5,6 +5,8 @@ namespace Pluswerk\TypoScriptAutoFixer\Fixer;
 
 use Exception;
 use Pluswerk\TypoScriptAutoFixer\FileBuilder;
+use Symfony\Component\Console\Helper\ProgressBar;
+use Symfony\Component\Console\Output\OutputInterface;
 
 final class IssueFixer
 {
@@ -26,18 +28,29 @@ final class IssueFixer
 
     /**
      * @param string $filePath
+     * @param OutputInterface $output
+     * @param ProgressBar $progressBarSub
      * @throws Exception
      */
-    public function fixIssuesForFile(string $filePath): void
+    public function fixIssuesForFile(string $filePath, OutputInterface $output, ProgressBar $progressBarSub): void
     {
         $file = $this->fileBuilder->buildFile($filePath);
-        $count = 0;
-        while ($file->issues()->count() > 0 && $count < 1000) {
-            $issue = $file->issues()->current();
-            $fixer = $this->fixerFactory->getFixerByIssue($issue);
-            $file = $fixer->fixIssue($file, $issue);
-            $count++;
+
+        if ($file->issues()->count() > 0) {
+            $progressBarSub->setMaxSteps($file->issues()->count());
+            $progressBarSub->start();
+
+            while ($file->issues()->count() > 0) {
+                $progressBarSub->setMessage($filePath, 'file');
+                $issue = $file->issues()->current();
+                $fixer = $this->fixerFactory->getFixerByIssue($issue);
+                $file = $fixer->fixIssue($file, $issue);
+                $progressBarSub->advance();
+                usleep(1000);
+            }
+            $file->removeNeedlessEmptyLines();
+            $progressBarSub->finish();
+            $output->writeln('');
         }
-        $file->removeNeedlessEmptyLines();
     }
 }

@@ -184,4 +184,8 @@ foo {
 The author of the package is [Pluswerk AG](https://github.com/pluswerk/typoscript-auto-fixer)
 
 ## Update
-Update for TYPO3v11
+
+- Update for TYPO3v11
+- Add search function for TypoScript files in given path
+- Add a progress bar
+- Add info with list of processed files
